@@ -16,7 +16,12 @@ app.get('/', (req, res) => {
 
 client.connect(err => {
   const collection = client.db("organicdb").collection("products");
-  console.log("Database Connected..")
+  const product = {name:"modhu", price:30, quantity: 15};
+    collection.insertOne(product)
+    .then(result => {
+      console.log("one product added")
+    })
+  console.log("Database Connected..");
   // client.close();
 });
 
