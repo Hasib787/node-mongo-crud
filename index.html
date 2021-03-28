@@ -17,10 +17,12 @@
         <button type="submit">Add Product</button>
     </form>
     <div id="products">
+    </div>
+    <div id="update">
 
     </div>
     <script>
-        const loadProducts = () => {
+        const loadAllProducts = () => {
             fetch('/products')
                 .then(res => res.json())
                 .then(products => {
@@ -29,22 +31,41 @@
                     products.forEach(pd => {
                         const p = document.createElement('p');
                         p.innerHTML = `<strong>${pd.name}</strong> --- <strong>price: </strong>${pd.price} ---<strong> quantity:</strong> ${pd.quantity}
-                            <button onclick="deleteProduct('${pd._id}')">Delete</button>
+                        <button onclick="loadProduct('${pd._id}')">Update</button>    
+                        <button onclick="deleteProduct('${pd._id}')">Delete</button>
+                       
                         `;
                         container.appendChild(p);
                     })
                 })
         }
-            loadProducts();
-            function deleteProduct(id){
-                fetch(`/delete/${id}`,{
-                    method: 'DELETE'
+        loadAllProducts();
+
+        function loadProduct(id) {
+            fetch(`product/${id}`)
+                .then(res => res.json())
+                .then(data => {
+                    const update = document.getElementById('update');
+                    update.innerHTML = `
+                    <h3>Update: ${data._id}</h3>
+                    price: <input type="text" value= "${data.price}" id='price'>
+                    <br>
+                    Quantity: <input type="text" value= "${data.quantity}" id='quantity'>
+                    <br>
+                    <button onclick="">submit</button>
+                    `;
                 })
+        }
+
+        function deleteProduct(id) {
+            fetch(`/delete/${id}`, {
+                method: 'DELETE'
+            })
                 .then(res => res.json())
                 .then(result => {
                     console.log("Delete successfully");
                 })
-            }
+        }
     </script>
 </body>
 
