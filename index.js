@@ -1,8 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-var password = 'EM1QQkgf2QcIXKe5';
-
 const MongoClient = require('mongodb').MongoClient;
+const ObjectId = require('mongodb').ObjectId;
+
 const uri = "mongodb+srv://organicUser:EM1QQkgf2QcIXKe5@cluster0.fg2cz.mongodb.net/organicdb?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -33,7 +33,13 @@ client.connect(err => {
         console.log('Data are added successfully');
         res.send('success')
       })
+  })
 
+  app.delete('/delete/:id', (req, res) => {
+    productCollection.deleteOne({_id: ObjectId(req.params.id)})
+    .then( result => {
+      console.log(result);
+    })
   })
 });
 
